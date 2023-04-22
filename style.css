@@ -6,21 +6,97 @@ html, body {
   background-color:azure;
 }
 .title{
-  height: 100px;
-}
-.titlewords{
+  background-color: #f1f1f1;
+  height: 80px;
+  padding: 1px;
   text-align: center;
-
 }
-.grid-container{
-  display: grid;
-  grid-template-columns: 20vw 80vw;
-  grid-template-rows: 100vh;
+
+/* 设置顶部导航栏的样式 */
+.topnav {
+  overflow: hidden;
+  background-color: #80bfbb;
+}
+/* 设置 topnav 链接的样式 */
+.topnav a {
+  float: left;
+  display: block;
+  color: #0c0c0c;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+/* 改变鼠标悬停时的颜色 */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.grid-container {display: grid;
+  margin: 10px;
+  height: 80%;
+  grid-template-columns: 15% 85%;
+  grid-template-rows:100%;
+}
+.grid-1 {
+  float:left;
+}
+.grid-2 {
+  float:left;
+  padding:10px;
+}
+.sidebar {
+  margin-left: 10px;
+  width: 100%;
+}
+.map {
+  width: 100%;
+  height: 100%;
+}
+#map:focus {
+  outline: #4A74A8 solid 0.15em;
   
 }
-
-.sidebar{
-  margin-left: 50px;
+.ol-popup {
+  position: absolute;
+  background-color: white;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #cccccc;
+  bottom: 12px;
+  left: -50px;
+  min-width: 280px;
+}
+.ol-popup:after, .ol-popup:before {
+  top: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.ol-popup:after {
+  border-top-color: white;
+  border-width: 10px;
+  left: 48px;
+  margin-left: -10px;
+}
+.ol-popup:before {
+  border-top-color: #cccccc;
+  border-width: 11px;
+  left: 48px;
+  margin-left: -11px;
+}
+.ol-popup-closer {
+  text-decoration: none;
+  position: absolute;
+  top: 2px;
+  right: 8px;
+}
+.ol-popup-closer:after {
+  content: "✖";
 }
 
 
