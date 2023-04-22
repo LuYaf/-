@@ -7,12 +7,60 @@
     <link rel="stylesheet" href="node_modules/ol/ol.css">
     <link rel="stylesheet" href="./style.css">
     <style>
+      body {
+        height: 100%;
+      }
+      .title{
+        background-color: #f1f1f1;
+        height: 10%;
+        padding: 1px;
+        text-align: center;
+      }
+      /* 设置顶部导航栏的样式 */
+      .topnav {
+        overflow: hidden;
+        background-color: #80bfbb;
+      }
+
+      /* 设置 topnav 链接的样式 */
+      .topnav a {
+        float: left;
+        display: block;
+        color: #0c0c0c;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+      }
+
+      /* 改变鼠标悬停时的颜色 */
+      .topnav a:hover {
+        background-color: #ddd;
+        color: black;
+      }
+
+      .grid-container {display: grid;
+        margin: 10px;
+        height: 80%;
+        grid-template-columns: 15% 85%;
+        grid-template-rows:100%;
+      }
+      .grid-1 {
+        float:left;
+      }
+      .grid-2 {
+        float:left;
+        padding:10px;
+      }
+      .sidebar {
+        margin-left: 10px;
+        width: 100%;
+      }
       .map {
         width: 100%;
-        height: 500px;
+        height: 100%;
       }
-      .grid-container{
-        height: 500px;
+      #map:focus {
+        outline: #4A74A8 solid 0.15em;
       }
       .ol-popup {
         position: absolute;
@@ -55,48 +103,39 @@
       .ol-popup-closer:after {
         content: "✖";
       }
-      a.skiplink {
-        position: absolute;
-        clip: rect(1px, 1px, 1px, 1px);
-        padding: 0;
-        border: 0;
-        height: 1px;
-        width: 1px;
-        overflow: hidden;
-      }
-      a.skiplink:focus {
-        clip: auto;
-        height: auto;
-        width: auto;
-        background-color: #fff;
-        padding: 0.3em;
-      }
-      #map:focus {
+      /* #map:focus {
         outline: #4A74A8 solid 0.15em;
-      }
+      } */
     </style>
   </head>
   <body>
-    <a class="skiplink" href="#map">Go to map</a>
-    <div class="title">
-      <h1 class="titlewords">四维看世界-地理教学</h1>
-    </div>
-
+    
     <div id="popup" class="ol-popup">
       <a href="#" id="popup-closer" class="ol-popup-closer"></a>
       <div id="popup-content"></div>
     </div>
 
+    <div class="title">
+      <h1 class="titlewords">四维看世界-地理教学</h1>
+    </div>
+
+    <div class="topnav">
+      <a href="#">《马可·波罗行纪》中的草原丝绸之路</a>
+      <a href="#">张骞与西北丝绸之路</a>
+      <a href="#">茶马古道与西南丝绸之路</a>
+      <a href="#">明代郑和与海上丝绸之路</a>
+    </div>
+
     <div class="grid-container">
       <div class="grid-1">
         <div class="sidebar">
-          <h2>主要操作</h2>
+          <h2>地图模式</h2>
           <input type="radio" name="baselayerradiobtn" value="OSMStandard" checked>普通地图<br>
           <input type="radio" name="baselayerradiobtn" value="StamenTerrain">地形图<br>
-          <input type="radio" name="baselayerradiobtn" value="OrdinaryMap" >普通天地图<br>
-          <input type="radio" name="baselayerradiobtn" value="TerrainMap">地形天地图<br>
+          <input type="radio" name="baselayerradiobtn" value="OrdinaryMap" >普通图(中文)<br>
+          <input type="radio" name="baselayerradiobtn" value="TerrainMap">地形图(中文)<br>
         </div>
-      </div>  
+      </div> 
       <div class="gird-2">
         <div id="map" class="map" tabindex="0"></div>
       </div>
