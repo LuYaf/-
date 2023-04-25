@@ -32,6 +32,32 @@ html, body {
   color: black;
 }
 
+ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  /* 相对定位-父 */
+  position: relative;
+}
+
+.one li {
+  margin: 10px;
+
+}
+
+/* 隐藏 */
+.one ul {
+  /* 绝对定位-子 */
+  
+  background: #CCCCCC;
+  display: none;
+}
+
+/* 显示 */
+.one li:hover ul {
+  display: block;
+}
+
 .grid-container {display: grid;
   margin: 10px;
   height: 80%;
@@ -100,5 +126,4 @@ html, body {
 .ol-popup-closer:after {
   content: "✖";
 }
-
 
