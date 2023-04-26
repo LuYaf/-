@@ -100,11 +100,8 @@ map.addLayer(baseLayerGroup);
 
 //地图切换功能
 const baseLayerElements = document.querySelectorAll('.sidebar >input[type=radio]')
-// console.log(baseLayerElements);
 for(let baseLayerElement of baseLayerElements){
-  // console.log(baseLayerElements)
   baseLayerElement.addEventListener('change', function(){
-    // console.log(this.value)
     let baseLayerElementValue = this.value;
     baseLayerGroup.getLayers().forEach(function(element, index, array){
       let baseLayerTitle = element.get('title');
@@ -149,26 +146,50 @@ const overlayLayer = new Overlay({
   element: overlayContainerinerElement  
 })
 map.addOverlay(overlayLayer);
-const overlayFratureName = document.getElementById('feature-name');
-const overlayFratureInfo = document.getElementById('feature-info')
 
-map.on('click',function(e){
+const overlayFratureName = document.getElementById('feature-name');//name
+const overlayFratureInfo = document.getElementById('feature-info')//info
+const overlayFeatureImages = document.getElementById('feature-images');//img
+
+// 新疆点击事件处理函数
+map.on('click', function(e) {
   overlayLayer.setPosition(undefined);
-  map.forEachFeatureAtPixel(e.pixel,function(feature, layer){
-    let clickedCoodinate = e.coordinate;
-    let clickedFeatureName = (feature.get('name'));
-    //let clickedFeatureInfo = (feature.get('info'));
-    overlayLayer.setPosition(clickedCoodinate);
+  let clickedCoordinate = e.coordinate;
+  let clickedFeature = null;
+  map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
+    clickedFeature = feature;
+  }, {
+    layerFilter: function(layerCandidate) {
+      return layerCandidate.get('title') === 'xinjiangGeoJSON';
+    }
+  });
+
+  if (clickedFeature) {
+    let clickedFeatureID = clickedFeature.get('id');
+    let clickedFeatureName = clickedFeature.get('name');
+    let clickedFeatureInfo = clickedFeature.get('info');
+    let clickedFeatureImages = clickedFeature.get('images');
+
+    overlayLayer.setPosition(clickedCoordinate);
     overlayFratureName.innerHTML = clickedFeatureName;
     overlayFratureInfo.innerHTML = clickedFeatureInfo;
-  },
-  {
-    layerFilter: function(layerCandidate){
-      return layerCandidate.get('title') === 'xinjiangGeoJSON'
-    }
+    overlayFeatureImages.innerHTML = '';
+
+    clickedFeatureImages.forEach(function(imagePath) {
+      const imgElement = document.createElement('img');
+      imgElement.src = imagePath;
+      imgElement.className = 'feature-image';
+      overlayFeatureImages.appendChild(imgElement);
+
+      imgElement.addEventListener('click', function() {// 点击图片时触发放大操作
+        imgElement.classList.toggle('enlarge');
+      });
+    });
   }
-  )
-})
+});
+
+
+
 
 //点击显示坐标功能
 // map.on('singleclick', function (evt) {
