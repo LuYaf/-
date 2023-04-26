@@ -5,13 +5,19 @@ import TileLayer from 'ol/layer/Tile.js';
 import View from 'ol/View.js';
 import LayerGroup from 'ol/layer/Group.js';
 import Stamen from 'ol/source/Stamen.js';
-import {toLonLat} from 'ol/proj.js';
+import { toLonLat } from 'ol/proj.js';
 import XYZ from 'ol/source/XYZ.js';
-import {format,toStringHDMS} from 'ol/coordinate.js';
+import { format, toStringHDMS } from 'ol/coordinate.js';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON.js';
-import {Circle, Fill, Stroke, Style} from 'ol/style.js';
+import { Circle, Fill, Stroke, Style } from 'ol/style.js';
+import { fromCircle } from 'ol/geom/Polygon';
+import { bbox } from 'ol/loadingstrategy';
+import { Vector } from 'ol/layer';
+
+
+
 
 // const container = document.getElementById('popup');
 // const content = document.getElementById('popup-content');
@@ -92,7 +98,7 @@ const tileMark2 = new TileLayer({
 })
 
 const baseLayerGroup = new LayerGroup({
-  layers:[
+  layers: [
     openStreetMapstandard, stamenTerrain, ordinaryMap, terrainMap, tileMark1, tileMark2
   ]
 })
@@ -101,12 +107,12 @@ map.addLayer(baseLayerGroup);
 //地图切换功能
 const baseLayerElements = document.querySelectorAll('.sidebar >input[type=radio]')
 // console.log(baseLayerElements);
-for(let baseLayerElement of baseLayerElements){
+for (let baseLayerElement of baseLayerElements) {
   // console.log(baseLayerElements)
-  baseLayerElement.addEventListener('change', function(){
+  baseLayerElement.addEventListener('change', function () {
     // console.log(this.value)
     let baseLayerElementValue = this.value;
-    baseLayerGroup.getLayers().forEach(function(element, index, array){
+    baseLayerGroup.getLayers().forEach(function (element, index, array) {
       let baseLayerTitle = element.get('title');
       element.setVisible(baseLayerTitle === baseLayerElementValue);
     })
@@ -120,7 +126,7 @@ const stroke = new Stroke({
   color: '#3399CC',
   width: 1.25,
 });
-const styles = [
+const xinjiangstyles = [
   new Style({
     image: new Circle({
       fill: fill,
@@ -137,24 +143,24 @@ const xinjiangGeoJSON = new VectorImageLayer({
     url: './data/grassland/xinjiang.geojson',
     format: new GeoJSON()
   }),
-  visible: true,
+  visible: false,
   title: 'xinjiangGeoJSON',
-  style: styles
-  })
+  style: xinjiangstyles
+})
 map.addLayer(xinjiangGeoJSON);
 
 //新疆地区点击显示json信息
 const overlayContainerinerElement = document.querySelector('.overlay-container');
 const overlayLayer = new Overlay({
-  element: overlayContainerinerElement  
+  element: overlayContainerinerElement
 })
 map.addOverlay(overlayLayer);
 const overlayFratureName = document.getElementById('feature-name');
 const overlayFratureInfo = document.getElementById('feature-info')
 
-map.on('click',function(e){
+map.on('click', function (e) {
   overlayLayer.setPosition(undefined);
-  map.forEachFeatureAtPixel(e.pixel,function(feature, layer){
+  map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
     let clickedCoodinate = e.coordinate;
     let clickedFeatureName = (feature.get('name'));
     //let clickedFeatureInfo = (feature.get('info'));
@@ -162,13 +168,38 @@ map.on('click',function(e){
     overlayFratureName.innerHTML = clickedFeatureName;
     overlayFratureInfo.innerHTML = clickedFeatureInfo;
   },
-  {
-    layerFilter: function(layerCandidate){
-      return layerCandidate.get('title') === 'xinjiangGeoJSON'
+    {
+      layerFilter: function (layerCandidate) {
+        return layerCandidate.get('title') === 'xinjiangGeoJSON'
+      }
     }
-  }
   )
 })
+
+// 丝绸之路路线图
+// const routestyles = {
+//   'route': new Style({
+//     stroke: new Stroke({
+//       color: 'blue',
+//       width: 2,
+//     }),
+//   }),
+// };
+
+const routeSource = new VectorImageLayer({
+  source: new VectorSource({
+    url: './data/map_all_in.geojson',
+    format: new GeoJSON(),
+  }),
+  visible: true,
+  title: 'routeGeoJSON',
+  // style: function(feature) {
+  //   return routeSource[feature.getGeometry().getType()];
+  // },
+});
+
+map.addLayer(routeSource);
+
 
 //点击显示坐标功能
 // map.on('singleclick', function (evt) {
