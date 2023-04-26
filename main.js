@@ -134,11 +134,43 @@ const xinjiangGeoJSON = new VectorImageLayer({
     url: './data/grassland/xinjiang.geojson',
     format: new GeoJSON()
   }),
-  visible: true,
+  visible: false,
   title: 'xinjiangGeoJSON',
   style: styles
   })
 map.addLayer(xinjiangGeoJSON);
+
+//点击菜单显示新疆地图
+const grasslandMenu = document.getElementById('grassland');
+const grasslandSubMenu = document.querySelectorAll('#grassland + ul > li')[1]; // 选择多种资源子菜单项
+grasslandSubMenu.addEventListener('click', function() {
+  xinjiangGeoJSON.setVisible(true);
+  grasslandRoadGeoJSON.setVisible(false);
+});
+
+//草原丝绸之路路线
+const grasslandRoadGeoJSON = new VectorImageLayer({
+  source: new VectorSource({
+    url: './data/grassland/grasslandRoad.geojson',
+    format: new GeoJSON()
+  }),
+  visible: false,
+  title: 'grasslandRoadGeoJSON',
+  style: styles
+  })
+map.addLayer(grasslandRoadGeoJSON);
+
+//点击菜单触发草原丝绸之路
+const grasslandRoad = document.getElementById('grasslandroad');
+grasslandRoad.addEventListener('click', function() {
+  // 这里设置显示silkRoadGeoJSON图层，隐藏其他图层
+  grasslandRoadGeoJSON.setVisible(true);
+  xinjiangGeoJSON.setVisible(false);
+  // 以此类推，如果有更多的图层，都可以在这里设置隐藏
+});
+
+
+
 
 //新疆地区点击显示json信息
 const overlayContainerinerElement = document.querySelector('.overlay-container');
@@ -151,7 +183,6 @@ const overlayFratureName = document.getElementById('feature-name');//name
 const overlayFratureInfo = document.getElementById('feature-info')//info
 const overlayFeatureImages = document.getElementById('feature-images');//img
 
-// 新疆点击事件处理函数
 map.on('click', function(e) {
   overlayLayer.setPosition(undefined);
   let clickedCoordinate = e.coordinate;

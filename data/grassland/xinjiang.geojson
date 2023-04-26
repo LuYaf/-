@@ -4,7 +4,7 @@
     {"type":"Feature",
      "properties":{"name":"新疆区域",
                    "id":1,
-                   "info":"范围",
+                   "info":"境内",
                    "images": [
                     "./pic/grassland/xinjiang-沙漠.jpg",
                     "./pic/grassland/xinjiang-绿洲.jpg",
