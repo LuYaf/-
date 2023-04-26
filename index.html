@@ -9,20 +9,46 @@
   </head>
   <body>
     
-    <div id="popup" class="ol-popup">
+    <!-- <div id="popup" class="ol-popup">
       <a href="#" id="popup-closer" class="ol-popup-closer"></a>
       <div id="popup-content"></div>
-    </div>
+    </div> -->
 
     <div class="title">
       <h1 class="titlewords">四维看世界-地理教学</h1>
     </div>
 
     <div class="topnav">
-      <a href="#" id="grassland">《马可·波罗行纪》中的草原丝绸之路</a>
-      <a href="#" id="northwest">张骞与西北丝绸之路</a>
-      <a href="#" id="southwest">茶马古道与西南丝绸之路</a>
-      <a href="#" id="sea">明代郑和与海上丝绸之路</a>
+      <ul class="one">
+        <li><a href="#" id="grassland">《马可·波罗行纪》中的草原丝绸之路</a>
+          <ul class="two">
+            <li><a href="#">丝绸路线</a></li>
+            <li><a href="#">多种资源</a></li>
+            <li><a href="#">民族交流</a></li>
+          </ul>
+        </li>
+        <li><a href="#" id="northwest">张骞与西北丝绸之路</a>
+          <ul class="two">
+            <li><a href="#">丝绸路线</a></li>
+            <li><a href="#">丝绸路线</a></li>
+            <li><a href="#">丝绸路线</a></li>
+          </ul>
+        </li>
+        <li><a href="#" id="southwest">茶马古道与西南丝绸之路</a>
+          <ul class="two">
+            <li><a href="#">丝绸路线</a></li>
+            <li><a href="#">丝绸路线</a></li>
+            <li><a href="#">丝绸路线</a></li>
+          </ul>
+        </li>
+        <li><a href="#" id="sea">明代郑和与海上丝绸之路</a>
+          <ul class="two">
+            <li><a href="#">丝绸路线</a></li>
+            <li><a href="#">丝绸路线</a></li>
+            <li><a href="#">丝绸路线</a></li>
+          </ul>
+        </li>
+      </ul>
     </div>
 
     <div class="grid-container">
@@ -37,6 +63,10 @@
       </div> 
       <div class="gird-2">
         <div id="map" class="map" tabindex="0"></div>
+      </div>
+      <div class="overlay-container">
+        <span class="overlay-text" id="feature-name"></span><br>
+        <span class="overlay-text" id="feature-info"></span><br>
       </div>
     </div>
     <!-- Pointer events polyfill for old browsers, see https://caniuse.com/#feat=pointer -->

@@ -13,40 +13,29 @@ import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON.js';
 import {Circle, Fill, Stroke, Style} from 'ol/style.js';
 
-/**
- * 构成弹出窗口的元素
- */
-const container = document.getElementById('popup');
-const content = document.getElementById('popup-content');
-const closer = document.getElementById('popup-closer');
+// const container = document.getElementById('popup');
+// const content = document.getElementById('popup-content');
+// const closer = document.getElementById('popup-closer');
 
-/**
- * 创建一个叠加层以将弹出窗口锚定到地图上
- */
-const overlay = new Overlay({
-  element: container,
-  autoPan: {
-    animation: {
-      duration: 250,
-    },
-  },
-});
 
-/**
- * 添加点击处理程序以隐藏弹出窗口
- * @return {boolean} 不要关注 href
- */
-closer.onclick = function () {
-  overlay.setPosition(undefined);
-  closer.blur();
-  return false;
-};
+// const overlay = new Overlay({
+//   element: container,
+//   autoPan: {
+//     animation: {
+//       duration: 250,
+//     },
+//   },
+// });
 
+// closer.onclick = function () {
+//   overlay.setPosition(undefined);
+//   closer.blur();
+//   return false;
+// };
 
 //加载初始标准地图
 const map = new Map({
   target: 'map',
-  overlays: [overlay],
   view: new View({
     center: [12153494.776357276, 4076801.3198558404],//这个位置是西安
     zoom: 3.5,
@@ -123,7 +112,7 @@ for(let baseLayerElement of baseLayerElements){
     })
   })
 }
-//新疆地区显示功能
+//新疆地区显示细节
 const fill = new Fill({
   color: 'rgba(255,255,255,0.4)',
 });
@@ -142,7 +131,7 @@ const styles = [
     stroke: stroke,
   }),
 ];
-
+//新疆地区显示功能
 const xinjiangGeoJSON = new VectorImageLayer({
   source: new VectorSource({
     url: './data/grassland/xinjiang.geojson',
@@ -152,15 +141,39 @@ const xinjiangGeoJSON = new VectorImageLayer({
   title: 'xinjiangGeoJSON',
   style: styles
   })
-
 map.addLayer(xinjiangGeoJSON);
 
+//新疆地区点击显示json信息
+const overlayContainerinerElement = document.querySelector('.overlay-container');
+const overlayLayer = new Overlay({
+  element: overlayContainerinerElement  
+})
+map.addOverlay(overlayLayer);
+const overlayFratureName = document.getElementById('feature-name');
+const overlayFratureInfo = document.getElementById('feature-info')
 
+map.on('click',function(e){
+  overlayLayer.setPosition(undefined);
+  map.forEachFeatureAtPixel(e.pixel,function(feature, layer){
+    let clickedCoodinate = e.coordinate;
+    let clickedFeatureName = (feature.get('name'));
+    //let clickedFeatureInfo = (feature.get('info'));
+    overlayLayer.setPosition(clickedCoodinate);
+    overlayFratureName.innerHTML = clickedFeatureName;
+    overlayFratureInfo.innerHTML = clickedFeatureInfo;
+  },
+  {
+    layerFilter: function(layerCandidate){
+      return layerCandidate.get('title') === 'xinjiangGeoJSON'
+    }
+  }
+  )
+})
 
 //点击显示坐标功能
-map.on('singleclick', function (evt) {
-  const coordinate = evt.coordinate;
-  const hdms = toStringHDMS(toLonLat(coordinate));
-  content.innerHTML = '<p>你点击的坐标是:</p><code>' + hdms + '</code>';
-  overlay.setPosition(coordinate);
-});
+// map.on('singleclick', function (evt) {
+//   const coordinate = evt.coordinate;
+//   const hdms = toStringHDMS(toLonLat(coordinate));
+//   content.innerHTML = '<p>你点击的坐标是:</p><code>' + hdms + '</code>';
+//   overlay.setPosition(coordinate);
+// });
