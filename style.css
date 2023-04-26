@@ -127,3 +127,17 @@ ul {
   content: "✖";
 }
 
+/* 新疆点击弹窗显示信息 */
+.overlay-container{
+  background-color: #80bfbb;
+  width:200px;
+  height: 30px;
+  text-align: center;
+  position: absolute;
+}
+.overlay-container #feature-info::after{
+  content:'';
+  position: absolute;
+  width: 150px;
+}
+
