@@ -1,14 +1,17 @@
 import Map from 'ol/Map.js';
 import Overlay from 'ol/Overlay.js';
 import OSM, { ATTRIBUTION } from 'ol/source/OSM.js';
-import Tile from 'ol/layer/Tile.js';
 import TileLayer from 'ol/layer/Tile.js';
 import View from 'ol/View.js';
 import LayerGroup from 'ol/layer/Group.js';
 import Stamen from 'ol/source/Stamen.js';
 import {toLonLat} from 'ol/proj.js';
 import XYZ from 'ol/source/XYZ.js';
-import {toStringHDMS} from 'ol/coordinate.js';
+import {format,toStringHDMS} from 'ol/coordinate.js';
+import VectorImageLayer from 'ol/layer/VectorImage';
+import VectorSource from 'ol/source/Vector';
+import GeoJSON from 'ol/format/GeoJSON.js';
+import {Circle, Fill, Stroke, Style} from 'ol/style.js';
 
 /**
  * 构成弹出窗口的元素
@@ -120,12 +123,44 @@ for(let baseLayerElement of baseLayerElements){
     })
   })
 }
+//新疆地区显示功能
+const fill = new Fill({
+  color: 'rgba(255,255,255,0.4)',
+});
+const stroke = new Stroke({
+  color: '#3399CC',
+  width: 1.25,
+});
+const styles = [
+  new Style({
+    image: new Circle({
+      fill: fill,
+      stroke: stroke,
+      radius: 5,
+    }),
+    fill: fill,
+    stroke: stroke,
+  }),
+];
 
+const xinjiangGeoJSON = new VectorImageLayer({
+  source: new VectorSource({
+    url: './data/grassland/xinjiang.geojson',
+    format: new GeoJSON()
+  }),
+  visible: true,
+  title: 'xinjiangGeoJSON',
+  style: styles
+  })
+
+map.addLayer(xinjiangGeoJSON);
+
+
+
+//点击显示坐标功能
 map.on('singleclick', function (evt) {
   const coordinate = evt.coordinate;
   const hdms = toStringHDMS(toLonLat(coordinate));
-  console.log(hdms);
-
   content.innerHTML = '<p>你点击的坐标是:</p><code>' + hdms + '</code>';
   overlay.setPosition(coordinate);
 });
