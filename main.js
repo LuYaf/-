@@ -231,9 +231,7 @@ const routeSource = new VectorImageLayer({
   title: 'routeGeoJSON',
   style: routestyles,
 });
-
 map.addLayer(routeSource);
-
 
 //点击显示坐标功能
 // map.on('singleclick', function (evt) {
