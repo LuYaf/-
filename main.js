@@ -6,6 +6,7 @@ import View from 'ol/View.js';
 import LayerGroup from 'ol/layer/Group.js';
 import Stamen from 'ol/source/Stamen.js';
 import { toLonLat } from 'ol/proj.js';
+import { fromLonLat  } from 'ol/proj';
 import XYZ from 'ol/source/XYZ.js';
 import { format, toStringHDMS } from 'ol/coordinate.js';
 import VectorImageLayer from 'ol/layer/VectorImage';
@@ -15,7 +16,6 @@ import { Circle, Fill, Stroke, Style } from 'ol/style.js';
 import { fromCircle } from 'ol/geom/Polygon';
 import { bbox } from 'ol/loadingstrategy';
 import { Vector } from 'ol/layer';
-
 
 
 
@@ -43,7 +43,7 @@ import { Vector } from 'ol/layer';
 const map = new Map({
   target: 'map',
   view: new View({
-    center: [12153494.776357276, 4076801.3198558404],//这个位置是西安
+    center: fromLonLat([75.83379993601642, 26.538130654400197]),
     zoom: 3.5,
   }),
 });
@@ -177,25 +177,59 @@ map.on('click', function (e) {
 })
 
 // 丝绸之路路线图
-// const routestyles = {
-//   'route': new Style({
-//     stroke: new Stroke({
-//       color: 'blue',
-//       width: 2,
-//     }),
-//   }),
-// };
+const routestyles = function(feature) {
+  let geometry = feature.getGeometry();
+  let styles = [];
+  if (geometry.getType() == 'Point' & feature.get('marker-color') == '#ff0000') {
+    styles.push(new Style({
+      image: new Circle({
+        radius: 3,
+        fill: new Fill({
+          color: "#F45B69"
+        }),
+        stroke: new Stroke({
+          color: feature.get('stroke'),
+          width: 1
+        })
+      })
+    }));
+  } 
+  else if (geometry.getType() == 'Point' & feature.get('marker-color') != '#ff0000') {
+    styles.push(new Style({
+      image: new Circle({
+        radius: 3,
+        fill: new Fill({
+          color: "#03A9F4"
+        }),
+        stroke: new Stroke({
+          color: feature.get('stroke'),
+          width: 1
+        })
+      })
+    }));
+  } 
+  else if (geometry.getType() == 'LineString') {
+    styles.push(new Style({
+      stroke: new Stroke({
+        color: "#028090",
+        width: 2,
+        opacity: 1
+      })
+    }));
+  }
+  return styles;
+};
+
 
 const routeSource = new VectorImageLayer({
   source: new VectorSource({
+    // projection: 'EPSG:4326',
     url: './data/map_all_in.geojson',
     format: new GeoJSON(),
   }),
   visible: true,
   title: 'routeGeoJSON',
-  // style: function(feature) {
-  //   return routeSource[feature.getGeometry().getType()];
-  // },
+  style: routestyles,
 });
 
 map.addLayer(routeSource);
