@@ -224,7 +224,7 @@ const routestyles = function(feature) {
 const routeSource = new VectorImageLayer({
   source: new VectorSource({
     // projection: 'EPSG:4326',
-    url: './data/map_all_in.geojson',
+    url: './data/route_all_in.geojson',
     format: new GeoJSON(),
   }),
   visible: true,
