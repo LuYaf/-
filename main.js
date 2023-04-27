@@ -106,11 +106,16 @@ map.addLayer(baseLayerGroup);
 
 //地图切换功能
 const baseLayerElements = document.querySelectorAll('.sidebar >input[type=radio]')
+<<<<<<< HEAD
 // console.log(baseLayerElements);
 for (let baseLayerElement of baseLayerElements) {
   // console.log(baseLayerElements)
   baseLayerElement.addEventListener('change', function () {
     // console.log(this.value)
+=======
+for(let baseLayerElement of baseLayerElements){
+  baseLayerElement.addEventListener('change', function(){
+>>>>>>> ec5e2d6bac6a5957f4d51506eb29112abe7e83ef
     let baseLayerElementValue = this.value;
     baseLayerGroup.getLayers().forEach(function (element, index, array) {
       let baseLayerTitle = element.get('title');
@@ -149,15 +154,46 @@ const xinjiangGeoJSON = new VectorImageLayer({
 })
 map.addLayer(xinjiangGeoJSON);
 
+//点击菜单显示新疆地图
+const grasslandMenu = document.getElementById('grassland');
+const grasslandSubMenu = document.querySelectorAll('#grassland + ul > li')[1]; // 选择多种资源子菜单项
+grasslandSubMenu.addEventListener('click', function() {
+  xinjiangGeoJSON.setVisible(true);
+  grasslandRoadGeoJSON.setVisible(false);
+});
+
+//草原丝绸之路路线
+const grasslandRoadGeoJSON = new VectorImageLayer({
+  source: new VectorSource({
+    url: './data/grassland/grasslandRoad.geojson',
+    format: new GeoJSON()
+  }),
+  visible: false,
+  title: 'grasslandRoadGeoJSON',
+  style: styles
+  })
+map.addLayer(grasslandRoadGeoJSON);
+
+//点击菜单触发草原丝绸之路
+const grasslandRoad = document.getElementById('grasslandroad');
+grasslandRoad.addEventListener('click', function() {
+  // 这里设置显示silkRoadGeoJSON图层，隐藏其他图层
+  grasslandRoadGeoJSON.setVisible(true);
+  xinjiangGeoJSON.setVisible(false);
+  // 以此类推，如果有更多的图层，都可以在这里设置隐藏
+});
+
+
+
+
 //新疆地区点击显示json信息
 const overlayContainerinerElement = document.querySelector('.overlay-container');
 const overlayLayer = new Overlay({
   element: overlayContainerinerElement
 })
 map.addOverlay(overlayLayer);
-const overlayFratureName = document.getElementById('feature-name');
-const overlayFratureInfo = document.getElementById('feature-info')
 
+<<<<<<< HEAD
 map.on('click', function (e) {
   overlayLayer.setPosition(undefined);
   map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
@@ -175,6 +211,50 @@ map.on('click', function (e) {
     }
   )
 })
+=======
+const overlayFratureName = document.getElementById('feature-name');//name
+const overlayFratureInfo = document.getElementById('feature-info')//info
+const overlayFeatureImages = document.getElementById('feature-images');//img
+
+map.on('click', function(e) {
+  overlayLayer.setPosition(undefined);
+  let clickedCoordinate = e.coordinate;
+  let clickedFeature = null;
+  map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
+    clickedFeature = feature;
+  }, {
+    layerFilter: function(layerCandidate) {
+      return layerCandidate.get('title') === 'xinjiangGeoJSON';
+    }
+  });
+
+  if (clickedFeature) {
+    let clickedFeatureID = clickedFeature.get('id');
+    let clickedFeatureName = clickedFeature.get('name');
+    let clickedFeatureInfo = clickedFeature.get('info');
+    let clickedFeatureImages = clickedFeature.get('images');
+
+    overlayLayer.setPosition(clickedCoordinate);
+    overlayFratureName.innerHTML = clickedFeatureName;
+    overlayFratureInfo.innerHTML = clickedFeatureInfo;
+    overlayFeatureImages.innerHTML = '';
+
+    clickedFeatureImages.forEach(function(imagePath) {
+      const imgElement = document.createElement('img');
+      imgElement.src = imagePath;
+      imgElement.className = 'feature-image';
+      overlayFeatureImages.appendChild(imgElement);
+
+      imgElement.addEventListener('click', function() {// 点击图片时触发放大操作
+        imgElement.classList.toggle('enlarge');
+      });
+    });
+  }
+});
+
+
+
+>>>>>>> ec5e2d6bac6a5957f4d51506eb29112abe7e83ef
 
 // 丝绸之路路线图
 const routestyles = function(feature) {
