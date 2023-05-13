@@ -42,7 +42,7 @@ import { Vector } from 'ol/layer';
 const map = new Map({
   target: 'map',
   view: new View({
-    center: [12153494.776357276, 4076801.3198558404],//这个位置是西安
+    center : fromLonLat([80, 25]),//地图中心
     zoom: 3.5,
   }),
 });
