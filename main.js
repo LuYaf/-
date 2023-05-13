@@ -171,6 +171,7 @@ grasslandRoad.addEventListener('click', function() {
   // 这里设置显示silkRoadGeoJSON图层，隐藏其他图层
   grasslandRoadGeoJSON.setVisible(true);
   xinjiangGeoJSON.setVisible(false);
+  routeGeoJSON.setVisible(false);
   // 以此类推，如果有更多的图层，都可以在这里设置隐藏
 });
 
