@@ -157,5 +157,13 @@ ul {
   z-index: 9999;
   cursor: zoom-out;
 }
+.overlay {
+  background-color: white;
+  border: 1px solid black;
+  padding: 4px;
+  font-size: 12px;
+}
+
+
 
 
