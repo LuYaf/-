@@ -16,6 +16,8 @@ import { Circle, Fill, Stroke, Style } from 'ol/style.js';
 import { fromCircle } from 'ol/geom/Polygon';
 import { bbox } from 'ol/loadingstrategy';
 import { Vector } from 'ol/layer';
+import { Vector as VectorLayer } from 'ol/layer';
+
 
 
 // const container = document.getElementById('popup');
@@ -38,6 +40,8 @@ import { Vector } from 'ol/layer';
 //   return false;
 // };
 
+
+
 //加载初始标准地图
 const map = new Map({
   target: 'map',
@@ -46,6 +50,7 @@ const map = new Map({
     zoom: 3.5,
   }),
 });
+
 
 //地图类型
 const openStreetMapstandard = new TileLayer({
@@ -114,7 +119,7 @@ for(let baseLayerElement of baseLayerElements){
     })
   })
 }
-//新疆地区显示细节
+//新疆地区显示
 const fill = new Fill({
   color: 'rgba(255,255,255,0.4)',
 });
@@ -133,10 +138,25 @@ const styles = [
     stroke: stroke,
   }),
 ];
-//新疆地区显示功能
+
+//新疆大区域显示功能
+const xinjiangallGeoJSON = new VectorImageLayer({
+  source: new VectorSource({
+    url: './data/grassland/xinjiangall.geojson',
+    format: new GeoJSON()
+  }),
+  visible: false,
+  title: 'xinjiangallGeoJSON',
+  style: styles
+  })
+map.addLayer(xinjiangallGeoJSON);
+
+
+
+//新疆小区域显示功能
 const xinjiangGeoJSON = new VectorImageLayer({
   source: new VectorSource({
-    url: './data/grassland/xinjiang.geojson',
+    url: './data/grassland/map.geojson',
     format: new GeoJSON()
   }),
   visible: false,
@@ -145,12 +165,22 @@ const xinjiangGeoJSON = new VectorImageLayer({
   })
 map.addLayer(xinjiangGeoJSON);
 
-//点击菜单显示新疆地图
+
+//点击菜单显示新疆小区域
 const grasslandMenu = document.getElementById('grassland');
-const grasslandSubMenu = document.querySelectorAll('#grassland + ul > li')[1]; // 选择多种资源子菜单项
+const grasslandSubMenu = document.querySelectorAll('#grassland + ul > li')[2]; // 选择多种资源子菜单项
 grasslandSubMenu.addEventListener('click', function() {
   xinjiangGeoJSON.setVisible(true);
+  xinjiangallGeoJSON.setVisible(true);
   grasslandRoadGeoJSON.setVisible(false);
+  routeGeoJSON.setVisible(false)
+});
+const grasslandxjMenu = document.querySelectorAll('#grassland + ul > li')[1]; // 选择新疆区域子菜单项
+grasslandxjMenu.addEventListener('click', function() {
+  xinjiangGeoJSON.setVisible(false);
+  xinjiangallGeoJSON.setVisible(true);
+  grasslandRoadGeoJSON.setVisible(false);
+  routeGeoJSON.setVisible(false)
 });
 
 //草原丝绸之路路线
@@ -172,6 +202,7 @@ grasslandRoad.addEventListener('click', function() {
   grasslandRoadGeoJSON.setVisible(true);
   xinjiangGeoJSON.setVisible(false);
   routeGeoJSON.setVisible(false);
+  xinjiangallGeoJSON.setVisible(false);
   // 以此类推，如果有更多的图层，都可以在这里设置隐藏
 });
 
@@ -201,12 +232,13 @@ map.on('click', function(e) {
     }
   });
 
+
   if (clickedFeature) {
-    let clickedFeatureID = clickedFeature.get('id');
+    //let clickedFeatureID = clickedFeature.get('id');
     let clickedFeatureName = clickedFeature.get('name');
     let clickedFeatureInfo = clickedFeature.get('info');
     let clickedFeatureImages = clickedFeature.get('images');
-
+    // 显示具体信息
     overlayLayer.setPosition(clickedCoordinate);
     overlayFratureName.innerHTML = clickedFeatureName;
     overlayFratureInfo.innerHTML = clickedFeatureInfo;
@@ -224,6 +256,7 @@ map.on('click', function(e) {
     });
   }
 });
+
 
 
 
@@ -278,7 +311,7 @@ const routeSource = new VectorImageLayer({
     url: './data/route_all_in.geojson',
     format: new GeoJSON(),
   }),
-  visible: true,
+  visible: false,
   title: 'routeGeoJSON',
   style: routestyles,
 });
